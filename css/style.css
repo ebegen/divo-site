@@ -73,8 +73,13 @@ header {
     letter-spacing: -0.5px;
 }
 
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
 nav a {
-    margin-left: 24px;
     text-decoration: none;
     color: var(--text-secondary);
     font-weight: 500;
@@ -83,6 +88,30 @@ nav a {
 }
 
 nav a:hover {
+    color: var(--text-primary);
+}
+
+/* Language picker — borrows the glass-card vibe so it doesn't look like
+   a stock browser dropdown. */
+#lang-picker {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+#lang-picker:hover {
+    border-color: rgba(233, 30, 99, 0.4);
+    background: rgba(233, 30, 99, 0.08);
+}
+#lang-picker option {
+    background: var(--bg-secondary);
     color: var(--text-primary);
 }
 
@@ -145,6 +174,122 @@ nav a:hover {
 .app-store-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(233, 30, 99, 0.4);
+}
+
+.hero-note {
+    margin-top: 14px;
+    font-size: 0.85rem !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 0 !important;
+}
+
+/* Tagline / eyebrow text — uppercase tracker for section headers. */
+.eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent-light);
+    margin-bottom: 18px;
+    text-transform: uppercase;
+}
+
+/* How-it-works strip */
+.how-section {
+    padding: 60px 0 40px;
+}
+.how-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    letter-spacing: -1px;
+}
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.step-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    position: relative;
+}
+.step-num {
+    position: absolute;
+    top: 24px;
+    inset-inline-end: 28px;
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.35;
+}
+.step-card h3 {
+    font-size: 1.2rem;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.step-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Aurora Club + Safety sections — single-column reading blocks */
+.aurora-section, .safety-section {
+    padding: 80px 0;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+}
+.aurora-section h2, .safety-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 18px;
+    letter-spacing: -0.8px;
+}
+.aurora-sub {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+.aurora-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 24px;
+    text-align: start;
+    display: inline-block;
+}
+.aurora-bullets li {
+    padding: 10px 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+    padding-inline-start: 28px;
+}
+.aurora-bullets li:last-child { border-bottom: none; }
+.aurora-bullets li::before {
+    content: "✦";
+    position: absolute;
+    inset-inline-start: 0;
+    color: var(--accent);
+    font-weight: 700;
+}
+.aurora-note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+.safety-section p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
 }
 
 /* Features Grid */
@@ -289,8 +434,44 @@ footer a:hover {
     color: var(--text-primary);
 }
 
+/* RTL — only Arabic for now. Most layout uses logical properties
+   (inset-inline-*, padding-inline-*, text-align: start) so flipping
+   `dir="rtl"` just works for ~95% of the page. The few exceptions
+   below mirror specific elements that still rely on physical sides. */
+html[dir="rtl"] body {
+    /* Use a font stack that handles Arabic glyphs gracefully alongside
+       SF Pro for English fallback words. */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Arabic", "Geeza Pro",
+                 "Segoe UI", Roboto, sans-serif;
+}
+html[dir="rtl"] .step-num {
+    /* `inset-inline-end` already handles the flip, but Safari < 16
+       sometimes drops the rule. Belt-and-braces. */
+    right: auto;
+    left: 28px;
+}
+
 /* Responsive */
+@media (max-width: 900px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 0;
+    }
+    nav {
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 80px 0 60px;
+    }
     .hero h1 {
         font-size: 2.6rem;
     }
@@ -304,8 +485,16 @@ footer a:hover {
         gap: 16px;
     }
 
-    .features-section h2 {
+    .features-section h2,
+    .how-section h2 {
         font-size: 2rem;
+    }
+
+    .aurora-section, .safety-section {
+        padding: 60px 24px;
+    }
+    .aurora-section h2, .safety-section h2 {
+        font-size: 1.7rem;
     }
 
     .content-page h1 {
